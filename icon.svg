@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#0f1420"/>
+  <rect x="96" y="120" width="320" height="272" rx="28" fill="#1c2434" stroke="#2a3447" stroke-width="6"/>
+  <rect x="96" y="120" width="320" height="272" rx="28" fill="none" stroke="#4f86f7" stroke-width="6" opacity="0.5"/>
+  <text x="256" y="248" font-family="Segoe UI, sans-serif" font-size="104" font-weight="800" fill="#6aa1ff" text-anchor="middle">SC</text>
+  <text x="256" y="332" font-family="Segoe UI, sans-serif" font-size="46" font-weight="700" fill="#e8edf6" text-anchor="middle">単語帳</text>
+</svg>

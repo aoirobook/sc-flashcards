@@ -1,0 +1,15 @@
+{
+  "name": "SC単語帳 - 情報処理安全確保支援士",
+  "short_name": "SC単語帳",
+  "description": "略称→英語フル→直訳→機能→試験での問われ方で覚えるSC試験用フラッシュカード",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1420",
+  "theme_color": "#0f1420",
+  "lang": "ja",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

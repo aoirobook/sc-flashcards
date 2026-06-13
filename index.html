@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1420" />
+  <title>SC単語帳</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">SC 単語帳</div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <!-- ホーム -->
+  <main id="home" class="screen">
+    <div class="today-card">
+      <div class="today-label">今日の学習</div>
+      <div class="today-count"><span id="due-count">0</span> 枚</div>
+      <div class="today-sub" id="today-sub"></div>
+      <button class="btn btn-primary big" id="start-review">毎朝の復習をはじめる</button>
+    </div>
+
+    <div class="row gap">
+      <button class="btn btn-ghost" id="start-all">全カードを順に見る</button>
+      <button class="btn btn-ghost" id="toggle-autospeak">🔊 自動読上: ON</button>
+    </div>
+
+    <section class="cat-section">
+      <div class="section-title">カテゴリ別</div>
+      <div id="cat-list" class="cat-list"></div>
+    </section>
+
+    <footer class="home-foot">
+      進捗はこの端末に保存されます（オフラインOK）。<br />
+      <button class="btn btn-link" id="reset-progress">学習進捗をリセット</button>
+    </footer>
+  </main>
+
+  <!-- 学習画面 -->
+  <section id="study" class="screen hidden">
+    <div class="study-top">
+      <button class="btn btn-icon" id="back-home" aria-label="戻る">←</button>
+      <div class="progress-bar"><div id="progress-fill"></div></div>
+      <div class="study-pos" id="study-pos"></div>
+    </div>
+
+    <div class="card-wrap">
+      <div class="flashcard" id="flashcard">
+        <!-- 表 -->
+        <div class="face front" id="front">
+          <div class="cat-tag" id="front-cat"></div>
+          <div class="abbr" id="front-abbr"></div>
+          <div class="hint">タップで答えを表示</div>
+        </div>
+        <!-- 裏 -->
+        <div class="face back hidden" id="back">
+          <div class="back-scroll">
+            <div class="abbr-small" id="back-abbr"></div>
+            <button class="full-line" id="speak-full">
+              <span class="spk">🔊</span><span id="back-full"></span>
+            </button>
+            <ul class="words" id="back-words"></ul>
+            <div class="literal" id="back-literal"></div>
+            <div class="block">
+              <div class="block-h">機能</div>
+              <div id="back-func"></div>
+            </div>
+            <div class="block">
+              <div class="block-h">試験での問われ方</div>
+              <ul id="back-exam"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls" id="controls">
+      <!-- 表のとき -->
+      <div id="ctrl-front">
+        <button class="btn btn-primary big" id="reveal">答えを見る</button>
+      </div>
+      <!-- 裏のとき(復習モード) -->
+      <div id="ctrl-grade" class="grade hidden">
+        <button class="btn grade-again" data-grade="again">もう一度<small>すぐ</small></button>
+        <button class="btn grade-hard" data-grade="hard">あいまい<small>明日</small></button>
+        <button class="btn grade-good" data-grade="good">覚えた<small>先送り</small></button>
+      </div>
+      <!-- 裏のとき(閲覧モード) -->
+      <div id="ctrl-next" class="hidden">
+        <button class="btn btn-ghost" id="prev-card">← 前</button>
+        <button class="btn btn-primary" id="next-card">次へ →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 完了画面 -->
+  <section id="done" class="screen hidden">
+    <div class="done-emoji">🎉</div>
+    <div class="done-title">おつかれさまでした</div>
+    <div class="done-sub" id="done-sub"></div>
+    <button class="btn btn-primary big" id="done-home">ホームへ</button>
+  </section>
+
+  <script src="cards.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
