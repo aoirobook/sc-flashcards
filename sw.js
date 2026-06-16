@@ -1,5 +1,5 @@
 // オフライン用サービスワーカー
-const CACHE = "sc-tango-v1";
+const CACHE = "sc-tango-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -25,16 +25,14 @@ self.addEventListener("activate", (e) => {
 // cache-first（更新時は cards.js などをネット優先で取りに行きフォールバック）
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
+  // network-first: オンライン時は常に最新を取得し、取れなければキャッシュで動作(オフライン対応)
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const network = fetch(e.request).then(res => {
-        if (res && res.status === 200 && res.type === "basic") {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
-        }
-        return res;
-      }).catch(() => cached);
-      return cached || network;
-    })
+    fetch(e.request).then(res => {
+      if (res && res.status === 200 && res.type === "basic") {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+      }
+      return res;
+    }).catch(() => caches.match(e.request))
   );
 });

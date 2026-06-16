@@ -117,8 +117,9 @@
       ? "今日のノルマは完了！"
       : `復習 ${due} 枚 ＋ 新規 ${fresh} 枚`;
 
+    const started = CARDS.filter(c => progress[c.id]).length;
     const learned = CARDS.filter(c => progress[c.id] && progress[c.id].box >= 4).length;
-    $("stats").textContent = `習得 ${learned} / ${CARDS.length}`;
+    $("stats").textContent = `着手 ${started}・習得 ${learned} / ${CARDS.length}`;
 
     $("toggle-autospeak").textContent = `🔊 自動読上: ${settings.autoSpeak ? "ON" : "OFF"}`;
 
@@ -128,15 +129,20 @@
   function renderCategories() {
     const cats = {};
     CARDS.forEach(c => {
-      if (!cats[c.cat]) cats[c.cat] = { total: 0, learned: 0 };
-      cats[c.cat].total++;
-      if (progress[c.id] && progress[c.id].box >= 4) cats[c.cat].learned++;
+      if (!cats[c.cat]) cats[c.cat] = { total: 0, learned: 0, fill: 0 };
+      const cat = cats[c.cat];
+      cat.total++;
+      const p = progress[c.id];
+      if (p) {
+        cat.fill += (Math.min(5, p.box) - 1) / 4; // box1→0%, box5→100%(覚えるたびに伸びる)
+        if (p.box >= 4) cat.learned++;
+      }
     });
     const list = $("cat-list");
     list.innerHTML = "";
     Object.keys(cats).forEach(name => {
-      const { total, learned } = cats[name];
-      const pct = Math.round((learned / total) * 100);
+      const { total, learned, fill } = cats[name];
+      const pct = Math.round((fill / total) * 100);
       const el = document.createElement("div");
       el.className = "cat-item";
       el.innerHTML = `
