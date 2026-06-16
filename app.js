@@ -48,9 +48,10 @@
   function newCards() { return CARDS.filter(isNew); }
 
   // 今日の学習キュー：期限到来カード全部 + 新規を上限まで
+  // 新規は「先頭から固定」ではなく毎回ランダムに選ぶ（出る顔ぶれを散らす）
   function buildTodayQueue() {
     const due = dueCards();
-    const fresh = newCards().slice(0, NEW_PER_DAY);
+    const fresh = shuffle(newCards()).slice(0, NEW_PER_DAY);
     return shuffle([...due, ...fresh]);
   }
 
