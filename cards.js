@@ -1647,6 +1647,371 @@ const CARDS = [
       "脆弱で使ってはいけない旧無線暗号=WEP",
       "IVの使い回し・RC4の欠陥が解読の原因"
     ]
+  },
+
+  // ===== 暗号(追加: 署名・利用モード・旧式・鍵まわり) =====
+  {
+    id: "ecdsa", cat: "暗号", abbr: "ECDSA",
+    full: "Elliptic Curve Digital Signature Algorithm",
+    words: [
+      { en: "Elliptic", ja: "楕円の" },
+      { en: "Curve", ja: "曲線" },
+      { en: "Digital", ja: "ディジタルの" },
+      { en: "Signature", ja: "署名" },
+      { en: "Algorithm", ja: "アルゴリズム(計算手順)" }
+    ],
+    literal: "楕円曲線によるディジタル署名アルゴリズム",
+    func: "楕円曲線暗号(ECC)を使ったディジタル署名方式。RSA署名より短い鍵で同等の強度を持ち、TLSや証明書で広く使われる。",
+    exam: [
+      "ECCベースの署名=ECDSA(RSA署名より短鍵で同強度)",
+      "署名は秘密鍵で生成→公開鍵で検証、という向き"
+    ]
+  },
+  {
+    id: "dsa", cat: "暗号", abbr: "DSA",
+    full: "Digital Signature Algorithm",
+    words: [
+      { en: "Digital", ja: "ディジタルの" },
+      { en: "Signature", ja: "署名" },
+      { en: "Algorithm", ja: "アルゴリズム(計算手順)" }
+    ],
+    literal: "ディジタル署名アルゴリズム",
+    func: "離散対数問題に基づく署名専用のアルゴリズム(暗号化はできない)。NISTの署名標準DSSで規定。楕円曲線版がECDSA。",
+    exam: [
+      "署名専用(暗号化不可)=DSA、暗号化も可=RSA の対比",
+      "完全性・認証・否認防止を担うのが署名"
+    ]
+  },
+  {
+    id: "tdes", cat: "暗号", abbr: "3DES",
+    full: "Triple Data Encryption Standard",
+    words: [
+      { en: "Triple", ja: "三重の" },
+      { en: "Data", ja: "データ" },
+      { en: "Encryption", ja: "暗号化" },
+      { en: "Standard", ja: "標準・規格" }
+    ],
+    literal: "三重のデータ暗号化標準",
+    func: "弱くなったDESをブロックごとに3回繰り返して強度を補った共通鍵暗号。互換目的の延命策で、現在はAESへの置換が推奨。",
+    exam: [
+      "DESを3回かけて延命=3DES(共通鍵)、最終的にAESへ",
+      "処理が重く、現在は非推奨に向かう流れ"
+    ]
+  },
+  {
+    id: "rc4", cat: "暗号", abbr: "RC4",
+    full: "Rivest Cipher 4",
+    words: [
+      { en: "Rivest", ja: "リベスト(考案者名)" },
+      { en: "Cipher", ja: "暗号" },
+      { en: "4", ja: "4(版)" }
+    ],
+    literal: "リベスト考案の暗号(第4)",
+    func: "1バイトずつ処理する代表的なストリーム暗号。かつてWEPやSSL/TLSで使われたが、鍵列の偏りなどで危殆化し現在は使用禁止。",
+    exam: [
+      "ストリーム暗号の代表=RC4(現在は危殆化・禁止)",
+      "WEPの解読原因、ブロック暗号との対比"
+    ]
+  },
+  {
+    id: "cbc", cat: "暗号", abbr: "CBC",
+    full: "Cipher Block Chaining",
+    words: [
+      { en: "Cipher", ja: "暗号" },
+      { en: "Block", ja: "ブロック(塊)" },
+      { en: "Chaining", ja: "連鎖" }
+    ],
+    literal: "暗号ブロックの連鎖",
+    func: "前のブロックの暗号文を次の平文にXORしてから暗号化する利用モード。同じ平文でも異なる暗号文になる。先頭にIVが必要。",
+    exam: [
+      "直前の暗号文を連鎖させる=CBC(IVが必要)",
+      "ECB(連鎖なし)が同一平文→同一暗号文で弱い、との対比"
+    ]
+  },
+  {
+    id: "ecb", cat: "暗号", abbr: "ECB",
+    full: "Electronic Code Book",
+    words: [
+      { en: "Electronic", ja: "電子的な" },
+      { en: "Code", ja: "符号" },
+      { en: "Book", ja: "表・帳簿" }
+    ],
+    literal: "電子的な符号表",
+    func: "各ブロックを独立に暗号化する最も単純な利用モード。同じ平文ブロックが同じ暗号文になり、画像の輪郭が残るなど情報が漏れるため非推奨。",
+    exam: [
+      "同一平文→同一暗号文で弱い利用モード=ECB",
+      "CBC/CTR/GCMとの比較、ECBを避ける理由(ペンギン画像の例)"
+    ]
+  },
+  {
+    id: "ctr", cat: "暗号", abbr: "CTR",
+    full: "Counter (mode)",
+    words: [
+      { en: "Counter", ja: "計数・カウンタ" },
+      { en: "mode", ja: "モード(方式)" }
+    ],
+    literal: "カウンタ方式",
+    func: "カウンタ値を暗号化して鍵ストリームを作り、平文とXORする利用モード。ブロック暗号をストリーム暗号的に使え、並列処理が可能。GCMの土台。",
+    exam: [
+      "カウンタから鍵列を作る=CTR(並列化可)",
+      "GCMはCTR＋認証、という関係"
+    ]
+  },
+  {
+    id: "md5", cat: "暗号", abbr: "MD5",
+    full: "Message Digest algorithm 5",
+    words: [
+      { en: "Message", ja: "メッセージ" },
+      { en: "Digest", ja: "要約・ダイジェスト" },
+      { en: "algorithm", ja: "アルゴリズム(計算手順)" },
+      { en: "5", ja: "5(版)" }
+    ],
+    literal: "メッセージ要約アルゴリズム(第5)",
+    func: "128bitのハッシュ値を生成する旧ハッシュ関数。容易に衝突を作れることが判明し、改ざん検知・署名用途では使用禁止(SHA-2へ)。",
+    exam: [
+      "衝突が見つかり危殆化したハッシュ=MD5/SHA-1",
+      "ハッシュの性質(一方向性・衝突困難性)が崩れる意味"
+    ]
+  },
+  {
+    id: "iv", cat: "暗号", abbr: "IV",
+    full: "Initialization Vector",
+    words: [
+      { en: "Initialization", ja: "初期化" },
+      { en: "Vector", ja: "ベクトル(値)" }
+    ],
+    literal: "初期化のための値",
+    func: "暗号化の最初に与えるランダムな初期値。同じ鍵・平文でも暗号文を毎回変えるために使う。使い回しや予測可能なIVは解読の原因。",
+    exam: [
+      "同一平文を毎回違う暗号文にする初期値=IV",
+      "IVの使い回しが招く脆弱性(WEPの例)"
+    ]
+  },
+  {
+    id: "kdf", cat: "暗号", abbr: "KDF",
+    full: "Key Derivation Function",
+    words: [
+      { en: "Key", ja: "鍵" },
+      { en: "Derivation", ja: "導出・派生" },
+      { en: "Function", ja: "関数" }
+    ],
+    literal: "鍵を導出する関数",
+    func: "パスワードや共有秘密から、用途に応じた暗号鍵を安全に作り出す関数。ソルトや反復で総当たりを困難にする。",
+    exam: [
+      "パスワード等から鍵を生成=KDF",
+      "ソルト・ストレッチング、PBKDF2/bcrypt/Argon2"
+    ]
+  },
+  {
+    id: "pbkdf2", cat: "暗号", abbr: "PBKDF2",
+    full: "Password-Based Key Derivation Function 2",
+    words: [
+      { en: "Password-Based", ja: "パスワードに基づく" },
+      { en: "Key", ja: "鍵" },
+      { en: "Derivation", ja: "導出・派生" },
+      { en: "Function", ja: "関数" },
+      { en: "2", ja: "2(版)" }
+    ],
+    literal: "パスワードに基づく鍵導出関数(第2)",
+    func: "パスワードにソルトを加え、ハッシュを何千回も反復(ストレッチング)して鍵を導く方式。総当たり・レインボーテーブル攻撃を遅くする。",
+    exam: [
+      "パスワード保存の安全策=ソルト＋ストレッチング(PBKDF2)",
+      "単純ハッシュ保存の危険、レインボーテーブル対策"
+    ]
+  },
+  {
+    id: "aead", cat: "暗号", abbr: "AEAD",
+    full: "Authenticated Encryption with Associated Data",
+    words: [
+      { en: "Authenticated", ja: "認証付きの" },
+      { en: "Encryption", ja: "暗号化" },
+      { en: "with", ja: "〜を伴う" },
+      { en: "Associated", ja: "関連する" },
+      { en: "Data", ja: "データ" }
+    ],
+    literal: "関連データを伴う認証付き暗号",
+    func: "暗号化(秘匿性)と認証タグ(完全性・改ざん検知)を一体で提供する方式。ヘッダ等の暗号化しない部分も改ざん検知できる。AES-GCMが代表。",
+    exam: [
+      "秘匿性と完全性を同時に=AEAD(AES-GCM/ChaCha20-Poly1305)",
+      "暗号化と認証を別々に組む際の落とし穴を避ける"
+    ]
+  },
+  {
+    id: "pgp", cat: "暗号", abbr: "PGP",
+    full: "Pretty Good Privacy",
+    words: [
+      { en: "Pretty", ja: "かなり・なかなか" },
+      { en: "Good", ja: "良い" },
+      { en: "Privacy", ja: "プライバシー・秘匿" }
+    ],
+    literal: "かなり良い秘匿(ソフト)",
+    func: "共通鍵で本文を暗号化し、その鍵を相手の公開鍵で暗号化して渡すハイブリッド暗号方式のメール暗号ソフト。署名も可能。S/MIMEと並ぶ。",
+    exam: [
+      "メールの暗号化・署名=PGP/GPG(S/MIMEと対比)",
+      "ハイブリッド暗号(共通鍵＋公開鍵)の典型例"
+    ]
+  },
+  {
+    id: "pqc", cat: "暗号", abbr: "PQC",
+    full: "Post-Quantum Cryptography",
+    words: [
+      { en: "Post", ja: "〜の後の" },
+      { en: "Quantum", ja: "量子(の)" },
+      { en: "Cryptography", ja: "暗号(技術)" }
+    ],
+    literal: "量子(計算機)後の暗号",
+    func: "量子コンピュータでも破られにくいとされる新しい暗号方式の総称(耐量子計算機暗号)。RSA/ECCが将来危殆化する懸念に備え標準化が進む。",
+    exam: [
+      "量子計算機で危殆化する公開鍵への備え=PQC",
+      "“今盗んで後で復号(Harvest now, decrypt later)”脅威の文脈"
+    ]
+  },
+
+  // ===== メモリ安全・BOF(新設) =====
+  {
+    id: "bof", cat: "メモリ安全・BOF", abbr: "BOF",
+    full: "Buffer Overflow",
+    words: [
+      { en: "Buffer", ja: "バッファ(一時記憶領域)" },
+      { en: "Overflow", ja: "あふれ・溢れること" }
+    ],
+    literal: "バッファのあふれ",
+    func: "確保した領域を超えてデータを書き込み、隣接メモリ(戻りアドレス等)を破壊する脆弱性。攻撃者が制御を奪い任意コード実行(RCE)に至りうる。C/C++で多い。",
+    exam: [
+      "領域超過の書き込みで制御奪取=バッファオーバフロー",
+      "対策=境界チェック・安全な関数・ASLR/DEP、結果としてRCE"
+    ]
+  },
+  {
+    id: "uaf", cat: "メモリ安全・BOF", abbr: "UAF",
+    full: "Use-After-Free",
+    words: [
+      { en: "Use", ja: "使用" },
+      { en: "After", ja: "〜の後で" },
+      { en: "Free", ja: "解放" }
+    ],
+    literal: "解放後の使用",
+    func: "解放済みメモリを指すポインタを再び使うことで、再確保された別データを操作・改ざんできてしまう脆弱性。任意コード実行につながる。",
+    exam: [
+      "解放済み領域を使う不具合=UAF",
+      "ヒープ領域の脆弱性、ダングリングポインタ"
+    ]
+  },
+  {
+    id: "intof", cat: "メモリ安全・BOF", abbr: "Integer Overflow",
+    full: "Integer Overflow",
+    words: [
+      { en: "Integer", ja: "整数" },
+      { en: "Overflow", ja: "あふれ・桁あふれ" }
+    ],
+    literal: "整数の桁あふれ",
+    func: "計算結果が型の最大値を超えて巻き戻る(小さな値になる)現象。確保サイズの計算を誤らせ、バッファオーバフローの引き金になる。",
+    exam: [
+      "桁あふれでサイズ計算が破綻→BOFの起点=整数オーバフロー",
+      "符号付き/符号なしの取り違え、境界値の検査"
+    ]
+  },
+  {
+    id: "fmtstr", cat: "メモリ安全・BOF", abbr: "Format String",
+    full: "Format String (vulnerability)",
+    words: [
+      { en: "Format", ja: "書式" },
+      { en: "String", ja: "文字列" }
+    ],
+    literal: "書式文字列(の脆弱性)",
+    func: "利用者入力をprintf等の書式指定にそのまま渡すことで、%x/%n等によりメモリの読み出し・書き換えを許す脆弱性。",
+    exam: [
+      "入力を書式指定に渡す危険=書式文字列脆弱性",
+      "対策=書式は固定し入力は引数として渡す"
+    ]
+  },
+  {
+    id: "aslr", cat: "メモリ安全・BOF", abbr: "ASLR",
+    full: "Address Space Layout Randomization",
+    words: [
+      { en: "Address", ja: "アドレス" },
+      { en: "Space", ja: "空間" },
+      { en: "Layout", ja: "配置" },
+      { en: "Randomization", ja: "ランダム化" }
+    ],
+    literal: "アドレス空間の配置のランダム化",
+    func: "スタックやライブラリの配置アドレスを起動ごとに無作為化し、攻撃者が狙うアドレスを予測困難にするBOF緩和策。",
+    exam: [
+      "メモリ配置を毎回ばらす緩和策=ASLR",
+      "DEP/スタックカナリアと組み合わせる多層防御"
+    ]
+  },
+  {
+    id: "dep", cat: "メモリ安全・BOF", abbr: "DEP",
+    full: "Data Execution Prevention",
+    words: [
+      { en: "Data", ja: "データ" },
+      { en: "Execution", ja: "実行" },
+      { en: "Prevention", ja: "防止" }
+    ],
+    literal: "データ(領域)の実行防止",
+    func: "スタックやヒープなどデータ領域のコード実行を禁止し、注入したシェルコードの実行を防ぐ仕組み(WindowsのDEP/CPUのNXビット)。",
+    exam: [
+      "データ領域のコード実行を禁止=DEP(NXビット)",
+      "回避手法のROPと、その対策ASLRの関係"
+    ]
+  },
+  {
+    id: "nx", cat: "メモリ安全・BOF", abbr: "NX",
+    full: "No-eXecute (bit)",
+    words: [
+      { en: "No", ja: "〜しない(否定)" },
+      { en: "eXecute", ja: "実行する" },
+      { en: "bit", ja: "ビット(印)" }
+    ],
+    literal: "実行禁止のビット",
+    func: "メモリページに「実行不可」の属性を立てるCPU機能。DEPの土台で、データ領域に書き込んだコードの実行を阻止する。",
+    exam: [
+      "ページに実行不可属性を付与=NXビット(DEPの実体)",
+      "シェルコード実行の防止、ROPで回避される点"
+    ]
+  },
+  {
+    id: "canary", cat: "メモリ安全・BOF", abbr: "Stack Canary",
+    full: "Stack Canary",
+    words: [
+      { en: "Stack", ja: "スタック" },
+      { en: "Canary", ja: "カナリア(危険を知らせる小鳥)" }
+    ],
+    literal: "スタックの“カナリア”(見張り)",
+    func: "戻りアドレスの手前に見張り用の値を置き、関数終了時に書き換わっていれば異常終了させてBOFを検知する仕組み(炭鉱のカナリアが由来)。",
+    exam: [
+      "戻りアドレス破壊を検知する番兵=スタックカナリア(SSP)",
+      "ASLR/DEPと並ぶスタックBOFの代表的対策"
+    ]
+  },
+  {
+    id: "rop", cat: "メモリ安全・BOF", abbr: "ROP",
+    full: "Return-Oriented Programming",
+    words: [
+      { en: "Return-Oriented", ja: "リターン(戻り)指向の" },
+      { en: "Programming", ja: "プログラミング" }
+    ],
+    literal: "リターン命令を起点に組む攻撃技法",
+    func: "DEPでコード注入が封じられても、既存コードの断片(ガジェット)をret命令で数珠つなぎにして任意処理を実現する高度な攻撃手法。",
+    exam: [
+      "DEP回避の攻撃技法=ROP(既存コードの断片を連結)",
+      "対策=ASLR、CFI(制御フロー整合性)"
+    ]
+  },
+  {
+    id: "pie", cat: "メモリ安全・BOF", abbr: "PIE",
+    full: "Position-Independent Executable",
+    words: [
+      { en: "Position-Independent", ja: "位置に依存しない" },
+      { en: "Executable", ja: "実行形式" }
+    ],
+    literal: "位置に依存しない実行形式",
+    func: "どのアドレスに配置されても動く形式でビルドした実行ファイル。本体コードもASLRの対象にでき、アドレス予測をより困難にする。",
+    exam: [
+      "実行ファイル本体もASLR対象化=PIE",
+      "ASLRの効果を最大化する前提条件"
+    ]
   }
 ];
 
